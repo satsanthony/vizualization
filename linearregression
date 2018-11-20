@@ -1,0 +1,38 @@
+#linear regression - Would you buy a property in this town? By Satish Anthony
+#www.tryanalyticsblog.com
+import numpy as np
+import pandas as pd
+import math
+df = pd.read_csv("C:\\temp\\CT-2014-home.csv")
+df.sort_values("SalePrice")
+xaxis = (df["AssessedValue"]/1000000)
+yaxis = (df["SalePrice"]/1000000)
+%matplotlib inline
+import matplotlib.pyplot as plt
+from sklearn.linear_model import LinearRegression
+Cat = []
+for x in xaxis:
+    Cat.append([x])
+model = LinearRegression()
+model.fit(Cat, yaxis)
+predicted = model.predict(Cat)
+plt.scatter(xaxis, yaxis)
+plt.plot(xaxis, predicted, color='red')
+plt.xlabel('Assessed value of the Property (Million$)')
+plt.ylabel('Sale Price of Home (Million$)')
+plt.title('2014 - Greenwich, Connecticut, USA Home Sales')
+plt.show()
+
+# Code to display the R-squared value
+x_list=list(xaxis)
+y_list=list(yaxis)
+n = len(xaxis)
+x_bar = sum(x_list)/n
+y_bar = sum(y_list)/n
+x_std = math.sqrt(sum([(xi-x_bar)**2 for xi in x_list])/(n-1))
+y_std = math.sqrt(sum([(yi-y_bar)**2 for yi in y_list])/(n-1))
+zx = [(xi-x_bar)/x_std for xi in x_list]
+zy = [(yi-y_bar)/y_std for yi in y_list]
+r = sum(zxi*zyi for zxi, zyi in zip(zx, zy))/(n-1)
+R2 = r**2
+print("The R-Squared value is : " + str(R2))
